@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" name="TinyUrl" targetNamespace="http://HTTP_HOST/tiny-server" xmlns:tns="http://HTTP_HOST/tiny-server" xmlns:impl="http://HTTP_HOST/tiny-server" xmlns:xsd1="http://HTTP_HOST/tiny-server" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+  <types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://HTTP_HOST/tiny-server">
+      <complexType name="UsernameToken">
+        <sequence/>
+      </complexType>
+    </schema>
+  </types>
+  <portType name="TinyUrlPortType">
+    <operation name="getTinyUrl" parameterOrder="url baseUrl context">
+      <input message="tns:GetTinyUrlRequest"/>
+      <output message="tns:GetTinyUrlResponse"/>
+    </operation>
+    <operation name="getFullUrl" parameterOrder="tinyUrl">
+      <input message="tns:GetFullUrlRequest"/>
+      <output message="tns:GetFullUrlResponse"/>
+    </operation>
+    <operation name="delete" parameterOrder="key">
+      <input message="tns:DeleteRequest"/>
+      <output message="tns:DeleteResponse"/>
+    </operation>
+  </portType>
+  <binding name="TinyUrlBinding" type="tns:TinyUrlPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getTinyUrl">
+      <soap:operation soapAction="urn:TinyUrl#TinyUrlServer#getTinyUrl"/>
+      <input>
+        <soap:body parts="url baseUrl context" use="encoded" namespace="http://HTTP_HOST/tiny-server" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+      <output>
+        <soap:body parts="return" use="encoded" namespace="http://HTTP_HOST/tiny-server" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+    <operation name="getFullUrl">
+      <soap:operation soapAction="urn:TinyUrl#TinyUrlServer#getFullUrl"/>
+      <input>
+        <soap:body parts="tinyUrl" use="encoded" namespace="http://HTTP_HOST/tiny-server" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+      <output>
+        <soap:body parts="return" use="encoded" namespace="http://HTTP_HOST/tiny-server" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+    <operation name="delete">
+      <soap:operation soapAction="urn:TinyUrl#TinyUrlServer#delete"/>
+      <input>
+        <soap:body parts="key" use="encoded" namespace="http://HTTP_HOST/tiny-server" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+      <output>
+        <soap:body parts="return" use="encoded" namespace="http://HTTP_HOST/tiny-server" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+  </binding>
+  <message name="GetTinyUrlRequest">
+    <part name="url" type="xsd:string"/>
+    <part name="baseUrl" type="xsd:string"/>
+    <part name="context" type="xsd:string"/>
+  </message>
+  <message name="GetTinyUrlResponse">
+    <part name="return" type="xsd:string"/>
+  </message>
+  <message name="GetFullUrlRequest">
+    <part name="tinyUrl" type="xsd:string"/>
+  </message>
+  <message name="GetFullUrlResponse">
+    <part name="return" type="xsd:string"/>
+  </message>
+  <message name="DeleteRequest">
+    <part name="key" type="xsd:string"/>
+  </message>
+  <message name="DeleteResponse">
+    <part name="return" type="xsd:int"/>
+  </message>
+  <service name="TinyUrlService">
+    <port name="TinyUrlPort" binding="tns:TinyUrlBinding">
+      <soap:address location="http://HTTP_HOST/tiny.server.php"/>
+    </port>
+  </service>
+</definitions>

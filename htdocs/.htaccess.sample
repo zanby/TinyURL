@@ -1,0 +1,27 @@
+SetEnv APPLICATION_ENV development
+
+# .htaccess configuration  -*- apache -*-
+Options -Indexes
+DirectoryIndex index.php
+Options +FollowSymlinks
+
+# mod_rewrite settings
+RewriteEngine on
+RewriteBase /
+
+RewriteCond %{REQUEST_URI} \/services\/tinyurl\/wsdl\/? [NC]
+RewriteRule  ^(.*)   wsdl.php          [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule  ^(.*)   index.php?/$1          [L,QSA]
+
+# php settings
+php_value magic_quotes_gpc       0
+php_value magic_quotes_runtime   0
+php_value magic_quotes_sybase    0
+
+# Protect files and directories:
+<Files ~ "\.(ini|log|tmpl|.svn)$">
+  order deny,allow
+  deny from all
+</Files>
